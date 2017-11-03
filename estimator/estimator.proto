@@ -1,0 +1,26 @@
+syntax = "proto3";
+package estimator;
+
+service Estimate {
+  rpc timeAndDistanceBetweenPoints (PointsInfo) returns (DirectionsInfo) {}
+}
+
+message PointsInfo {
+  Origin origin = 1;
+  Destination destination = 2;
+}
+
+message Origin {
+  string lat = 1;
+  string long = 2;
+}
+
+message Destination {
+  string lat = 1;
+  string long = 2;
+}
+
+message DirectionsInfo {
+  int32 time = 1;
+  int32 distance = 2;
+}

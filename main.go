@@ -7,7 +7,7 @@ import (
 
 	"github.com/roflomglol/estimator/maps"
 
-	pb "github.com/roflomglol/estimator/estimation"
+	pb "github.com/roflomglol/estimator/estimator"
 	"google.golang.org/grpc"
 )
 
@@ -18,9 +18,9 @@ const (
 type server struct{}
 
 func (s *server) TimeAndDistanceBetweenPoints(ctx context.Context, in *pb.PointsInfo) (*pb.DirectionsInfo, error) {
-	start := maps.Point{Lat: in.Lat1, Long: in.Long1}
-	finish := maps.Point{Lat: in.Lat2, Long: in.Long2}
-	time, distance := maps.CalculateTimeAndDistance(&start, &finish)
+	origin := maps.Point{Lat: in.Origin.Lat, Long: in.Origin.Long}
+	destination := maps.Point{Lat: in.Destination.Lat, Long: in.Destination.Long}
+	time, distance := maps.CalculateTimeAndDistance(&origin, &destination)
 
 	return &pb.DirectionsInfo{Time: int32(time), Distance: int32(distance)}, nil
 }
@@ -32,6 +32,6 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterEstimationServer(s, &server{})
+	pb.RegisterEstimateServer(s, &server{})
 	s.Serve(lis)
 }
