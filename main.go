@@ -22,7 +22,7 @@ func (s *server) TimeAndDistanceBetweenPoints(ctx context.Context, in *pb.Points
 	destination := maps.Point{Lat: in.Destination.Lat, Long: in.Destination.Long}
 	time, distance := maps.CalculateTimeAndDistance(&origin, &destination)
 
-	return &pb.DirectionsInfo{Time: int32(time), Distance: int32(distance)}, nil
+	return &pb.DirectionsInfo{Time: time, Distance: distance}, nil
 }
 
 func main() {
