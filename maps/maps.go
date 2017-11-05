@@ -55,7 +55,7 @@ func CalculateTimeAndDistance(start, finish *Point) (distance int32, duration in
 
 func buildURL(start, finish *Point) string {
 	return fmt.Sprintf(
-		"http://127.0.0.1:5000/route/v1/driving/%v;%v",
+		"http://osm:5000/route/v1/driving/%v;%v",
 		start.toParam(),
 		finish.toParam(),
 	)

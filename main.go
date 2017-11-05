@@ -1,9 +1,10 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
+
+	"golang.org/x/net/context"
 
 	"github.com/roflomglol/estimator/maps"
 

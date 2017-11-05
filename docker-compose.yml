@@ -1,0 +1,13 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "3001:3001"
+  osm:
+    image: osrm/osrm-backend:latest
+    volumes:
+      - ../osm/data:/data
+    ports:
+      - "5000:5000"
+    command: osrm-routed --algorithm mld /data/central-fed-district-latest.osm.pbf
