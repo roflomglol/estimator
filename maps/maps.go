@@ -25,7 +25,7 @@ type directions struct {
 }
 
 // CalculateTimeAndDistance takes
-func CalculateTimeAndDistance(start, finish *Point) (distance int32, duration int32) {
+func CalculateTimeAndDistance(start, finish *Point) (distance int32, time int32) {
 	url := buildURL(start, finish)
 
 	resp, err := http.Get(url)
@@ -48,9 +48,9 @@ func CalculateTimeAndDistance(start, finish *Point) (distance int32, duration in
 	}
 
 	distance = int32(d.Routes[0].Distance)
-	duration = int32(d.Routes[0].Duration)
+	time = int32(d.Routes[0].Duration)
 
-	return distance, duration
+	return distance, time
 }
 
 func buildURL(start, finish *Point) string {
