@@ -2,7 +2,6 @@ package maps
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -64,7 +63,7 @@ func CalculateTimeAndDistance(origin, dest *Point) (distance, time int32, err er
 		}
 	}
 
-	return distance, time, nil
+	return
 }
 
 func fetchDataFromOSM(origin, dest *Point) (d, t int32, err error) {
@@ -72,14 +71,14 @@ func fetchDataFromOSM(origin, dest *Point) (d, t int32, err error) {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		return d, t, errors.New("Problems reaching OSM API")
+		return
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return d, t, errors.New("Problems reading OSM API response body")
+		return
 	}
 
 	var j = new(osmResponse)
@@ -87,13 +86,13 @@ func fetchDataFromOSM(origin, dest *Point) (d, t int32, err error) {
 	err = json.Unmarshal(body, &j)
 
 	if err != nil {
-		return d, t, errors.New("Problems parsing OSM API response body")
+		return
 	}
 
 	d = int32(j.Routes[0].Distance)
 	t = int32(j.Routes[0].Duration)
 
-	return d, t, nil
+	return
 }
 
 func fetchDataFromGoogle(origin, dest *Point) (d, t int32, err error) {
@@ -101,14 +100,14 @@ func fetchDataFromGoogle(origin, dest *Point) (d, t int32, err error) {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		return d, t, errors.New("Problems reaching Google API")
+		return
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return d, t, errors.New("Problems reading Google API response body")
+		return
 	}
 
 	var j = new(googleResponse)
@@ -116,13 +115,13 @@ func fetchDataFromGoogle(origin, dest *Point) (d, t int32, err error) {
 	err = json.Unmarshal(body, &j)
 
 	if err != nil {
-		return d, t, errors.New("Problems parsing Google API response body")
+		return
 	}
 
 	d = int32(j.Routes[0].Legs[0].Distance.Value)
 	t = int32(j.Routes[0].Legs[0].Duration.Value)
 
-	return d, t, nil
+	return
 }
 
 func buildURLforOSM(origin, dest *Point) string {
