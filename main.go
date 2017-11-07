@@ -21,7 +21,12 @@ type server struct{}
 func (s *server) TimeAndDistanceBetweenPoints(ctx context.Context, in *pb.PointsInfo) (*pb.DirectionsInfo, error) {
 	origin := maps.Point{Lat: in.Origin.Lat, Long: in.Origin.Long}
 	destination := maps.Point{Lat: in.Destination.Lat, Long: in.Destination.Long}
-	distance, time := maps.CalculateTimeAndDistance(&origin, &destination)
+	distance, time, err := maps.CalculateTimeAndDistance(&origin, &destination)
+
+	if err != nil {
+		log.Println(err)
+		return &pb.DirectionsInfo{}, err
+	}
 
 	return &pb.DirectionsInfo{Time: time, Distance: distance}, nil
 }
