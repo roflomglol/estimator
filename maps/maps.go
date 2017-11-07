@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
 
 // Point is a struct representing a point on a map with lattitude and longitude
@@ -152,19 +151,8 @@ func buildURLforOSM(origin, dest *Point) string {
 
 func buildURLforGoogle(origin, dest *Point) string {
 	return fmt.Sprintf(
-		"https://maps.googleapis.com/maps/api/directions/json?key=%v&mode=driving&origin=%v&destination=%v",
-		getGoogleAPIKey(),
+		"https://maps.googleapis.com/maps/api/directions/json?mode=driving&origin=%v&destination=%v",
 		origin.toParamForGoogle(),
 		dest.toParamForGoogle(),
 	)
-}
-
-func getGoogleAPIKey() string {
-	key, exists := os.LookupEnv("GOOGLE_API_KEY")
-
-	if exists != true {
-		log.Println("Google API key is missing. Fallback won't work.")
-	}
-
-	return key
 }
