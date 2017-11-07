@@ -44,12 +44,6 @@ type googleResponse struct {
 	} `json:"routes"`
 }
 
-type result struct {
-	distance int32
-	time     int32
-	err      error
-}
-
 // CalculateTimeAndDistance takes
 func CalculateTimeAndDistance(origin, dest *Point) (distance, time int32, err error) {
 	distance, time, err = fetchDataFromOSM(origin, dest)
