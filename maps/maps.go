@@ -53,34 +53,18 @@ type result struct {
 
 // CalculateTimeAndDistance takes
 func CalculateTimeAndDistance(origin, dest *Point) (distance, time int32, err error) {
-	ch1 := make(chan result)
+	distance, time, err = fetchDataFromOSM(origin, dest)
 
-	go asyncFetchData(fetchDataFromOSM, origin, dest, ch1)
+	if err != nil {
+		log.Println(err)
+		distance, time, err = fetchDataFromGoogle(origin, dest)
 
-	r := <-ch1
-
-	if r.err != nil {
-		log.Println(r.err)
-		ch2 := make(chan result)
-
-		go asyncFetchData(fetchDataFromGoogle, origin, dest, ch2)
-
-		r = <-ch2
-
-		if r.err != nil {
-			return 0, 0, r.err
+		if err != nil {
+			return
 		}
 	}
 
-	return r.distance, r.time, nil
-}
-
-func asyncFetchData(f func(*Point, *Point) (int32, int32, error), o, d *Point, c chan result) {
-	distance, time, err := f(o, d)
-	r := result{distance: distance, time: time, err: err}
-
-	c <- r
-	close(c)
+	return distance, time, nil
 }
 
 func fetchDataFromOSM(origin, dest *Point) (d, t int32, err error) {
